@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { api } from './services/api';
+import { api } from './api.js';
 import './styles.css';
 
 const icons = { arrow: '↗', search: '⌕', sun: '☼', menu: '☰', close: '×', check: '✓', bolt: 'ϟ', trend: '↗', filter: '≡', star: '☆', filledStar: '★', trash: '⌫', spark: '✦' };
