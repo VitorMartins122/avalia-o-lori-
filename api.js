@@ -1,51 +1,12 @@
-const STORAGE_KEY = 'techpulse-signals';
-
-const seedSignals = [
-  { id: 1, title: 'Agentes de IA colaborativos', category: 'IA & Dados', level: 'Alta', score: 94, summary: 'Sistemas que dividem tarefas complexas em fluxos autônomos e auditáveis.', detail: 'A nova geração de agentes conecta raciocínio, ferramentas e memória. O diferencial está em desenhar limites claros, observabilidade e pontos de aprovação humana.', tags: ['Automação', 'LLM'], accent: 'violet', saved: true },
-  { id: 2, title: 'Computação espacial no trabalho', category: 'Produto', level: 'Média', score: 78, summary: 'Interfaces 3D começam a sair do laboratório e entram em operações remotas.', detail: 'Headsets mais leves e colaboração imersiva estão criando novas formas de treinar equipes, visualizar dados e prototipar produtos.', tags: ['XR', 'Design'], accent: 'cyan', saved: false },
-  { id: 3, title: 'Passkeys como padrão', category: 'Segurança', level: 'Alta', score: 88, summary: 'O login sem senha evolui de tendência para requisito de confiança digital.', detail: 'Passkeys combinam criptografia de chave pública com biometria local. A adoção exige bons fluxos de recuperação e suporte a múltiplos dispositivos.', tags: ['Identidade', 'WebAuthn'], accent: 'lime', saved: false },
-  { id: 4, title: 'Edge computing sustentável', category: 'Infraestrutura', level: 'Média', score: 71, summary: 'Processamento mais perto da origem reduz latência e custo energético.', detail: 'Arquiteturas distribuídas estão usando modelos menores e hardware especializado para entregar inteligência onde os dados nascem.', tags: ['Edge', 'Green IT'], accent: 'orange', saved: false },
-  { id: 5, title: 'Interfaces de voz naturais', category: 'Produto', level: 'Baixa', score: 64, summary: 'A voz se torna camada de controle para experiências digitais mais inclusivas.', detail: 'O avanço em modelos multimodais torna a conversa útil para navegar por dados, configurar ferramentas e acessar serviços sem depender apenas da tela.', tags: ['Acessibilidade', 'UX'], accent: 'pink', saved: false },
-  { id: 6, title: 'Dados sintéticos verificáveis', category: 'IA & Dados', level: 'Alta', score: 83, summary: 'Times criam dados artificiais com rastreabilidade para acelerar testes e treino.', detail: 'Quando dados reais são escassos ou sensíveis, conjuntos sintéticos bem avaliados permitem experimentar sem abrir mão de privacidade.', tags: ['Privacidade', 'MLOps'], accent: 'blue', saved: false },
+const STORAGE_KEY = 'corebench-systems';
+const seedSystems = [
+  { id: 1, name: 'PC Equilíbrio', kind: 'normal', type: 'Estudos, trabalho e criação', score: 62, summary: 'Uma configuração eficiente para produtividade, navegação e criação leve sem desperdício de hardware.', detail: 'O PC normal prioriza equilíbrio: poucos componentes ficam ociosos e o investimento se concentra em uma experiência rápida para tarefas do dia a dia. Ele roda editores, muitas abas e jogos leves com conforto.', specs: { cpu: 'Core i5 12400 · 6c/12t', gpu: 'Integrada UHD 730', ram: '16 GB DDR4', storage: 'SSD NVMe 512 GB' }, accent: 'violet', saved: true },
+  { id: 2, name: 'PC Performance', kind: 'gamer', type: 'Jogos, streaming e render', score: 94, summary: 'Mais núcleos, GPU dedicada e memória rápida para manter altas taxas de quadros em cargas pesadas.', detail: 'O PC gamer reserva mais potência para gráficos e processamento paralelo. A GPU dedicada assume o trabalho visual, enquanto CPU e RAM sustentam jogos, streaming, edição e renderização ao mesmo tempo.', specs: { cpu: 'Ryzen 7 7800X3D · 8c/16t', gpu: 'GeForce RTX 4070 Super', ram: '32 GB DDR5', storage: 'SSD NVMe 1 TB Gen4' }, accent: 'lime', saved: false },
+  { id: 3, name: 'Estação Criativa', kind: 'normal', type: 'Edição de vídeo e design', score: 79, summary: 'Mais memória e armazenamento veloz para quem trabalha com arquivos grandes e multitarefa.', detail: 'Uma estação criativa não precisa ser gamer para entregar desempenho: RAM e SSD rápidos reduzem esperas, enquanto uma placa intermediária acelera exportações e prévias.', specs: { cpu: 'Core i7 12700 · 12c/20t', gpu: 'RTX 3060 12 GB', ram: '32 GB DDR4', storage: 'SSD NVMe 2 TB' }, accent: 'cyan', saved: false },
+  { id: 4, name: 'Mini PC Essencial', kind: 'normal', type: 'Escritório e estudos', score: 48, summary: 'Compacto, silencioso e econômico para tarefas de escritório, aulas e consumo de mídia.', detail: 'Para rotinas leves, o ganho real está em inicialização rápida, baixo consumo e estabilidade. A configuração deixa claro que mais desempenho nem sempre significa melhor custo-benefício.', specs: { cpu: 'Ryzen 5 5600G · 6c/12t', gpu: 'Radeon integrada', ram: '16 GB DDR4', storage: 'SSD SATA 480 GB' }, accent: 'orange', saved: false },
 ];
-
-const wait = (ms = 360) => new Promise(resolve => setTimeout(resolve, ms));
-const getSignals = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || seedSignals;
-const saveSignals = (signals) => localStorage.setItem(STORAGE_KEY, JSON.stringify(signals));
-
-export async function request(method, path, body) {
-  await wait();
-  if (path === '/signals' && method === 'GET') return { data: getSignals(), status: 200 };
-  if (path === '/signals' && method === 'POST') {
-    if (!body?.title || !body?.category) throw new Error('Título e categoria são obrigatórios.');
-    const signals = getSignals();
-    const created = { ...body, id: Date.now(), score: 60, level: 'Nova', summary: body.summary || 'Sinal enviado pela comunidade.', detail: body.summary || 'Este sinal ainda está em análise pela curadoria.', tags: ['Comunidade'], accent: 'cyan', saved: false };
-    saveSignals([created, ...signals]);
-    return { data: created, status: 201 };
-  }
-  const match = path.match(/^\/signals\/(\d+)$/);
-  if (match && method === 'PATCH') {
-    const id = Number(match[1]);
-    const signals = getSignals();
-    const updated = signals.find(signal => signal.id === id);
-    if (!updated) throw new Error('Sinal não encontrado.');
-    const next = { ...updated, ...body };
-    saveSignals(signals.map(signal => signal.id === id ? next : signal));
-    return { data: next, status: 200 };
-  }
-  if (match && method === 'DELETE') {
-    const id = Number(match[1]);
-    const signals = getSignals();
-    if (!signals.some(signal => signal.id === id)) throw new Error('Sinal não encontrado.');
-    saveSignals(signals.filter(signal => signal.id !== id));
-    return { data: { id }, status: 204 };
-  }
-  throw new Error('Rota da API não encontrada.');
-}
-
-export const api = {
-  listSignals: () => request('GET', '/signals'),
-  createSignal: (payload) => request('POST', '/signals', payload),
-  updateSignal: (id, payload) => request('PATCH', `/signals/${id}`, payload),
-  deleteSignal: (id) => request('DELETE', `/signals/${id}`),
-};
+const wait = (ms = 300) => new Promise(resolve => setTimeout(resolve, ms));
+const getSystems = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || seedSystems;
+const saveSystems = systems => localStorage.setItem(STORAGE_KEY, JSON.stringify(systems));
+export async function request(method, path, body) { await wait(); if (path === '/systems' && method === 'GET') return { data: getSystems(), status: 200 }; if (path === '/systems' && method === 'POST') { if (!body?.name || !body?.cpu) throw new Error('Nome e processador são obrigatórios.'); const systems = getSystems(); const created = { ...body, id: Date.now(), score: body.kind === 'gamer' ? 86 : 58, summary: body.summary || 'Configuração enviada para comparação.', detail: body.summary || 'Esta configuração ainda precisa de uma análise detalhada.', accent: body.kind === 'gamer' ? 'lime' : 'violet', saved: false }; saveSystems([created, ...systems]); return { data: created, status: 201 }; } const match = path.match(/^\/systems\/(\d+)$/); if (match && method === 'PATCH') { const id = Number(match[1]); const systems = getSystems(); const current = systems.find(system => system.id === id); if (!current) throw new Error('Configuração não encontrada.'); const updated = { ...current, ...body }; saveSystems(systems.map(system => system.id === id ? updated : system)); return { data: updated, status: 200 }; } if (match && method === 'DELETE') { const id = Number(match[1]); const systems = getSystems(); if (!systems.some(system => system.id === id)) throw new Error('Configuração não encontrada.'); saveSystems(systems.filter(system => system.id !== id)); return { data: { id }, status: 204 }; } throw new Error('Rota da API não encontrada.'); }
+export const api = { listSystems: () => request('GET', '/systems'), createSystem: payload => request('POST', '/systems', payload), updateSystem: (id, payload) => request('PATCH', `/systems/${id}`, payload), deleteSystem: id => request('DELETE', `/systems/${id}`) };

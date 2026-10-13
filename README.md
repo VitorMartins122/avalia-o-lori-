@@ -1,6 +1,6 @@
-# TechPulse — Radar de tecnologia
+# CoreBench — Comparador de PCs
 
-Aplicação web responsiva para acompanhar sinais, ferramentas e tendências do ecossistema de tecnologia. Projeto desenvolvido para demonstrar arquitetura de front-end, consumo de API REST mockada, acessibilidade e organização de código.
+Aplicação web responsiva para entender o processamento de um computador e comparar um PC normal com um PC gamer. Projeto desenvolvido para demonstrar arquitetura de front-end, consumo de API REST mockada, acessibilidade e organização de código.
 
 ## Executar no VS Code
 
@@ -18,10 +18,10 @@ npm run preview
 
 ## Requisitos contemplados
 
-- 3 telas: Visão geral, Explorar sinais e Laboratório.
-- Componentes reutilizáveis: `StatCard`, `SignalCard`, `Badge`, `Modal` e `Toast`.
-- Interações: navegação, busca/filtros, favoritos, modal de detalhes, exclusão e formulário.
-- Formulário com 7 campos, validação obrigatória e mensagens acessíveis.
+- 3 telas: Visão geral, Comparar PCs e Montar configuração.
+- Componentes reutilizáveis: `ComparisonCard`, `SpecList`, `ScoreBar`, `StatCard`, `Badge`, `Modal` e `Toast`.
+- Interações: navegação, busca/filtros, favoritos, modal de análise, exclusão e formulário.
+- Formulário com mais de 5 campos, validação obrigatória e mensagens acessíveis.
 - API REST mockada em `src/services/api.js`: `GET`, `POST`, `PATCH` e `DELETE`, com estados de carregamento e erro.
 - Layout responsivo, foco visível, landmarks, labels, contraste e suporte a `prefers-reduced-motion`.
 - Histórico Git com commits organizados por etapa.
